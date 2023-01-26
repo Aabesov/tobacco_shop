@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    def create_user(self,username, email, password=None, **kwargs):
+    def create_user(self, username, email, password=None, **kwargs):
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **kwargs)
         user.set_password(password)
@@ -38,8 +38,8 @@ class AbstractEmailUser(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     class Meta:
         abstract = True
@@ -61,6 +61,8 @@ class User(AbstractEmailUser):
     full_name = models.CharField(
         'Full name', max_length=255, blank=True
     )
+
+
     activation_code = models.CharField(max_length=50, blank=True)
 
     def get_full_name(self):
@@ -77,6 +79,3 @@ class User(AbstractEmailUser):
 
     def create_activation_code(self):
         self.activation_code = str(uuid.uuid4())
-
-
-

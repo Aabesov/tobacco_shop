@@ -8,4 +8,5 @@ from tabaco_shop import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/accounts/', include("authentication.urls")),
+    path('api/v1/products/', include("product.urls")),
 ]

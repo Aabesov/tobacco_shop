@@ -33,7 +33,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     # class Meta:
     #     model = User
-    #     fields = ("email", "password")
+    #     fields = ("username", "email", "password")
+
+    # username = serializers.CharField(max_length=255)
     email = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100)
 
@@ -48,6 +50,7 @@ class LoginSerializer(serializers.Serializer):
         return {
             "user": user
         }
+
 
 
 class LoginTokenSerializer(serializers.Serializer):
