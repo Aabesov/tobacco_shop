@@ -1,18 +1,18 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Product
-from .serializers import ProductSeriaizer
+from .serializers import ProductSerializer
 from rest_framework.response import Response
 
 
 class ProductListAPIView(APIView):
     def get(self, request):
         products = Product.objects.all()
-        serializer = ProductSeriaizer
+        serializer = ProductSerializer
         return Response(serializer(products, many=True).data)
 
     def post(self, request):
-        serializer = ProductSeriaizer(data=request.data)
+        serializer = ProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"post": serializer.data})
@@ -26,7 +26,7 @@ class ProductListAPIView(APIView):
         except:
             return Response({"method": "Object does not exist"})
 
-        serializer = ProductSeriaizer(data=request.data, instance=instance)
+        serializer = ProductSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -38,6 +38,3 @@ class ProductListAPIView(APIView):
         to_delete = Product.objects.get(id=pk)
         to_delete.delete()
         return Response(f"success")
-
-
-

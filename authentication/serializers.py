@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate
 from rest_framework.authtoken.models import Token
 from authentication.send_mail import send_message_to_email
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Favorite
 
 User = get_user_model()
 
@@ -72,3 +73,16 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data["new_password"])
         instance.save()
         return instance
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorite
+        fields = ["product_id"]
+
+    def create(self, validated_data):
+        user_id = self.context.get("user")
+        favorite = Favorite(**validated_data)
+        favorite.user_id = user_id
+        favorite.save()
+        return favorite

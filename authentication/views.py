@@ -8,9 +8,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import generics
-from .serializers import RegisterSerializer, LoginJWTSerializer, PasswordChangeSerializer
+from .serializers import RegisterSerializer, LoginJWTSerializer, PasswordChangeSerializer, FavoriteSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.db.models import Q
+from .models import Favorite
 
 TRAINEE_CONSTANT = "trainee"
 
@@ -53,14 +54,27 @@ class UserTokenLogoutAPIView(APIView):
         return response
 
 
-class LoginJWTAPIView(TokenObtainPairView):
+class LoginJWTView(TokenObtainPairView):
     serializer_class = LoginJWTSerializer
 
 
-class PasswordChangeAPIView(generics.UpdateAPIView):
+class PasswordChangeView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, ]
     serializer_class = PasswordChangeSerializer
 
     def get_object(self, queryset=None):
         obj = self.request.user
         return obj
+
+
+class FavoriteAPIView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = FavoriteSerializer
+    queryset = Favorite.objects.all()
+
+    def get_serializer_context(self):
+        return {"user": self.request.user}
+
+    # def get_queryset(self):
+    #     return self.queryset.filter(user_id=self.request.user)
+
