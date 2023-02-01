@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from product.models import Product
 
 
 class UserManager(BaseUserManager):
@@ -62,7 +63,6 @@ class User(AbstractEmailUser):
         'Full name', max_length=255, blank=True
     )
 
-
     activation_code = models.CharField(max_length=50, blank=True)
 
     def get_full_name(self):
@@ -79,3 +79,8 @@ class User(AbstractEmailUser):
 
     def create_activation_code(self):
         self.activation_code = str(uuid.uuid4())
+
+
+class Favorite(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -9,7 +9,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=70)
+    name = models.CharField(max_length=70, unique=True)
     description = models.TextField()
     price = models.PositiveSmallIntegerField()
     quantity = models.PositiveSmallIntegerField()
